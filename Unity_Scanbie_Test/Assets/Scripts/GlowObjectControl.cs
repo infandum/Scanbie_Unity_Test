@@ -46,6 +46,8 @@ public class GlowObjectControl : MonoBehaviour
     {
         Renderers = GetComponentsInChildren<Renderer>();
         GlowCameraController.RegisterObject(this);
+
+        tag = "Editable";
     }
 
     private void Update()

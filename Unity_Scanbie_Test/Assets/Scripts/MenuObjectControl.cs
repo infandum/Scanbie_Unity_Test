@@ -25,14 +25,14 @@ public class MenuObjectControl : MonoBehaviour
 
     void Start()
     {
-        //MenuCanvas = (GameObject)Resources.Load("ContextMenu");
-        //var menu = Instantiate(MenuCanvas, new Vector3(0, 0, 0), Quaternion.identity);
-        //menu.transform.parent = transform;
+
     }
 
     void Awake()
     {
-        if(MenuCanvas == null)
+        tag = "Editable";
+
+        if (MenuCanvas == null)
             MenuCanvas = (GameObject)Resources.Load("HoverMenu");
 
         
@@ -47,15 +47,26 @@ public class MenuObjectControl : MonoBehaviour
         if (HoverMenu == null)
         {
             HoverMenu = Instantiate(MenuCanvas, new Vector3(0, 0, 0), Quaternion.identity).transform;
-            //HoverMenu.parent = transform;
-            HoverMenu.SetParent(transform,false);
-            Mesh mesh = GetComponent<MeshFilter>().mesh;
-            Bounds bounds = mesh.bounds;
-            HoverMenu.transform.localPosition = new Vector3(0, bounds.size.y, 0);        
+            HoverMenu.SetParent(transform, false);
+            
+            if (GetComponent<MeshFilter>() != null)
+            {
+                Mesh mesh = GetComponent<MeshFilter>().mesh;
+                Bounds bounds = mesh.bounds;
+                HoverMenu.transform.localPosition = new Vector3(0, bounds.size.y, 0);
+            }
+            else
+            {
+                if (GetComponent<Collider>() != null)
+                {
+                    var col = GetComponent<Collider>();
+                    Bounds bounds = col.bounds;
+                    HoverMenu.transform.localPosition = new Vector3(0, bounds.size.y, 0);
+                }
+            }
+            
         }
-
         HoverMenu.gameObject.SetActive(false);
-
     }
     // Update is called once per frame
     void Update()

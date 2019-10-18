@@ -24,12 +24,15 @@ public class SelectionManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_hover != null && _hover != _selected)
+
+        //if you want to keep the hover menu open on the selected object change:
+        //_hover != _selected
+        if (_hover != null /*&& _hover != _selected*/)
         {
             var hoverGlow = _hover.GetComponent<GlowObjectControl>();
             var hoverMenu = _hover.GetComponent<MenuObjectControl>();
 
-            if (hoverGlow != null)
+            if (hoverGlow != null && _hover != _selected)
                 hoverGlow.OnExit();
             if (hoverMenu != null)
                 hoverMenu.OnExit();
@@ -46,8 +49,6 @@ public class SelectionManager : MonoBehaviour
             {
                 var targetGlow = targetTransform.GetComponent<GlowObjectControl>();
                 var targetMenu = targetTransform.GetComponent<MenuObjectControl>();
-                if (targetGlow != null)
-                {   
                     if (Input.GetMouseButtonDown(0))
                     {
                         if (_selected != null)
@@ -71,9 +72,7 @@ public class SelectionManager : MonoBehaviour
                         if(targetMenu != null)
                             targetMenu.OnHover();
                        _hover = targetTransform;
-                    }
-                }
-                
+                    }   
             }     
         }
     }

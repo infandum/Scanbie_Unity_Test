@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hover : MonoBehaviour
+public class ItemDisplayEffect : MonoBehaviour
 {
     
 
