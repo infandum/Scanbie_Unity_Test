@@ -16,13 +16,13 @@ public class LookAtCamera : MonoBehaviour
     //public bool BillboardZ = true;
     public bool HasOffset = false;
     public float OffsetToCamera;
-    private Vector3 _localStartPosition;
+    private Vector3 _initLocalPos;
     private Transform _camera;
 
     void Start()
     {
         _camera = Camera.main.transform;
-        _localStartPosition = transform.localPosition;
+        _initLocalPos = transform.localPosition;
     }
 
     //Orient the camera after all movement is completed this frame to avoid jittering
@@ -35,7 +35,7 @@ public class LookAtCamera : MonoBehaviour
 
         if (HasOffset || Math.Abs(OffsetToCamera) > 0.01f)
         {
-            transform.localPosition = _localStartPosition;
+            transform.localPosition = _initLocalPos;
             transform.position = transform.position + transform.rotation * Vector3.forward * OffsetToCamera;
         }
 

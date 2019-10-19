@@ -39,21 +39,18 @@ public class GlowCameraController : MonoBehaviour
 		_glowColorID = Shader.PropertyToID("_GlowColor");
 
 		_commandBuffer = new CommandBuffer();
-		_commandBuffer.name = "Glowing Objects Buffer"; // This name is visible in the Frame Debugger, so make it a descriptive!
+		_commandBuffer.name = "Glowing Objects Buffer"; // This name is visible in the Frame Debugger
 		GetComponent<Camera>().AddCommandBuffer(CameraEvent.BeforeImageEffects, _commandBuffer);
 	}
 
-	/// <summary>
-	/// TODO: Add a deregister method.
-	/// </summary>
-	//public static void RegisterObject(GlowObjectCmd glowObj)
-	//{
-	//	if (_instance != null)
-	//	{
-	//		_instance._glowableObjects.Add(glowObj);
-	//	}
-	//}
-
+    public static void DeregisterObject(GlowObjectControl glowObj)
+    {
+        if (_instance != null)
+        {
+            if(_instance._glowableObjects.Contains(glowObj))
+                _instance._glowableObjects.Remove(glowObj);
+        }
+    }
     public static void RegisterObject(GlowObjectControl glowObj)
     {
         if (_instance != null)
@@ -64,7 +61,7 @@ public class GlowCameraController : MonoBehaviour
 
     /// <summary>
     /// Adds all the commands, in order, we want our command buffer to execute.
-    /// Similar to calling sequential rendering methods insde of OnRenderImage().
+    /// Similar to calling sequential rendering methods inside of OnRenderImage().
     /// </summary>
     private void RebuildCommandBuffer()
 	{

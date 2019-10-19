@@ -21,18 +21,28 @@ public class SelectionManager : MonoBehaviour
         
     }
 
-    // Update is called once per frame
+    private void DeselectObject()
+    {
+        if (_selected != null)
+        {
+            if (_selected.GetComponent<GlowObjectControl>() != null)
+                _selected.GetComponent<GlowObjectControl>().OnExit();
+            if (_selected.GetComponent<MenuObjectControl>() != null)
+                _selected.GetComponent<MenuObjectControl>().OnExit();
+        }
+        _selected = null;
+    }
     void Update()
     {
 
         //if you want to keep the hover menu open on the selected object change:
         //_hover != _selected
-        if (_hover != null /*&& _hover != _selected*/)
+        if (_hover != null && _hover != _selected)
         {
             var hoverGlow = _hover.GetComponent<GlowObjectControl>();
             var hoverMenu = _hover.GetComponent<MenuObjectControl>();
 
-            if (hoverGlow != null && _hover != _selected)
+            if (hoverGlow != null /*&& _hover != _selected*/)
                 hoverGlow.OnExit();
             if (hoverMenu != null)
                 hoverMenu.OnExit();
@@ -45,19 +55,18 @@ public class SelectionManager : MonoBehaviour
         if (Physics.Raycast(ray, out var target))
         {
             var targetTransform = target.transform;
-            if (targetTransform.CompareTag(_targetTag))
+
+            if (targetTransform.CompareTag("Hover_UI"))
+                return;
+
+                if (targetTransform.CompareTag(_targetTag))
             {
                 var targetGlow = targetTransform.GetComponent<GlowObjectControl>();
                 var targetMenu = targetTransform.GetComponent<MenuObjectControl>();
                     if (Input.GetMouseButtonDown(0))
                     {
-                        if (_selected != null)
-                        {
-                            if(_selected.GetComponent<GlowObjectControl>() != null)
-                                _selected.GetComponent<GlowObjectControl>().OnExit();
-                            if(_selected.GetComponent<MenuObjectControl>() != null)
-                                _selected.GetComponent<MenuObjectControl>().OnExit();                 
-                        }
+                        DeselectObject();
+
                         if (targetGlow != null)
                             targetGlow.OnSelect(_SelectColor);
                         _selected = targetTransform;
@@ -73,7 +82,21 @@ public class SelectionManager : MonoBehaviour
                             targetMenu.OnHover();
                        _hover = targetTransform;
                     }   
+            }
+            else
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    DeselectObject();
+                }
             }     
+        }
+        else
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                DeselectObject();
+            }
         }
     }
 }
