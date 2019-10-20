@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SelectionManager : MonoBehaviour
 {
@@ -15,6 +17,11 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] private Color _SelectColor = Color.green;
     [SerializeField] private float _lerpFactor = 10;
 
+    public Color c;
+
+    public Image colorimg;
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -57,9 +64,22 @@ public class SelectionManager : MonoBehaviour
             var targetTransform = target.transform;
 
             if (targetTransform.CompareTag("Hover_UI"))
+            {
+                _hover = targetTransform;
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (_hover.transform.parent)
+                    {
+                        var editorUi = _hover.transform.parent;
+                        if(editorUi.GetComponent<EditorUIControl>())
+                            editorUi.GetComponent<EditorUIControl>().ExecuteOption(_selected);
+                    }
+                }
                 return;
+            }
+               
 
-                if (targetTransform.CompareTag(_targetTag))
+            if (targetTransform.CompareTag(_targetTag))
             {
                 var targetGlow = targetTransform.GetComponent<GlowObjectControl>();
                 var targetMenu = targetTransform.GetComponent<MenuObjectControl>();

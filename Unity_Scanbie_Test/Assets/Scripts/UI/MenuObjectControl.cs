@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 
 public class MenuObjectControl : MonoBehaviour
@@ -7,6 +8,8 @@ public class MenuObjectControl : MonoBehaviour
 
     [SerializeField] private GameObject MenuCanvas;
 
+
+    public Transform _editorUi;
     private Transform _hoverMenu;
     private Bounds _bounds;
 
@@ -29,6 +32,7 @@ public class MenuObjectControl : MonoBehaviour
 
     public void OnExit()
     {
+        _hoverMenu.FindChildWithTag("Editor_UI").gameObject.SetActive(false);
         _hoverMenu.gameObject.SetActive(false);
     }
 
@@ -80,16 +84,18 @@ public class MenuObjectControl : MonoBehaviour
         //vecObjToCamera = vecObjToCamera + new Vector3(0.1f, 0.1f, 0.1f);
         vecObjToCamera = vecObjToCamera.normalized;
         Vector3 offSetObjToCamera = Vector3.Scale(Bounds.size, vecObjToCamera) /** (1 / avgScale)*/;
-        print(name + ":: " + Bounds.size.y + " // Scale:: " + avgScale + " // Bounds.y / Scale:: " + (Bounds.size.y / avgScale));
-        print(name + "-Direction:: " + vecObjToCamera + " // Offset:: " + offSetObjToCamera);
+        //print(name + ":: " + Bounds.size.y + " // Scale:: " + avgScale + " // Bounds.y / Scale:: " + (Bounds.size.y / avgScale));
+        //print(name + "-Direction:: " + vecObjToCamera + " // Offset:: " + offSetObjToCamera);
         _hoverMenu.transform.localPosition = offSetObjToCamera;
-
+        //_hoverMenu.gameObject.getChil
 
         //_hoverMenu.transform.position = new Vector3(transform.position.x , transform.position.y + _bounds.size.y /*/ (_bounds.size.y * avgScale)*/, transform.position.z/* - _bounds.size.z*/);
-        
+        //_editorUi = _hoverMenu.FindChildWithTag()
         _hoverMenu.transform.localScale = /*new Vector3(1.0f, 1.0f, 1.0f) +*/ (new Vector3(1.0f, 1.0f, 1.0f) / avgScale);
 
         _hoverMenu.gameObject.SetActive(false);
+
+
     }
     // Update is called once per frame
     void Update()
