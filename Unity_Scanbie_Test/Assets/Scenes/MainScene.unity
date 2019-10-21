@@ -646,7 +646,7 @@ MonoBehaviour:
   zoomSensitivity: 10
   fastZoomSensitivity: 50
   looking: 0
-  active: 1
+  Active: 1
 --- !u!54 &534669910
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1379,6 +1379,7 @@ GameObject:
   - component: {fileID: 1686061582}
   - component: {fileID: 1686061581}
   - component: {fileID: 1686061583}
+  - component: {fileID: 1686061584}
   m_Layer: 0
   m_Name: Selection Manager
   m_TagString: GameController
@@ -1398,15 +1399,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19fcbe3c8ac3f894badf39cd55d4a314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultMaterial: {fileID: 2100000, guid: aa79ae2261e501e48873b6bb5e2b3108, type: 2}
-  _selectedMaterial: {fileID: 2100000, guid: fb3c649fa89c5694ea31cf26682901b8, type: 2}
   _hover: {fileID: 0}
   _selected: {fileID: 0}
   _hoverColor: {r: 1, g: 1, b: 1, a: 1}
   _SelectColor: {r: 0.2130146, g: 1, b: 0, a: 1}
   _lerpFactor: 10
-  c: {r: 0, g: 0, b: 0, a: 0}
-  colorimg: {fileID: 0}
 --- !u!4 &1686061582
 Transform:
   m_ObjectHideFlags: 0
@@ -1447,6 +1444,27 @@ MonoBehaviour:
   - {r: 1, g: 0.34117648, b: 0.36862746, a: 1}
   - {r: 1, g: 0.34117648, b: 0.36862746, a: 1}
   IsSaved: 1
+--- !u!114 &1686061584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686061580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0857d1329899e4c85ddd898f0a2462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textureWidth: 360
+  textureHeight: 360
+  _colorTexture: {fileID: 0}
+  _saturationTexture: {fileID: 0}
+  _heuTexture: {fileID: 0}
+  _heu: 0
+  _saturation: 1
+  _value: 1
+  styleTexture: {fileID: 0}
 --- !u!1 &2077440875
 GameObject:
   m_ObjectHideFlags: 0

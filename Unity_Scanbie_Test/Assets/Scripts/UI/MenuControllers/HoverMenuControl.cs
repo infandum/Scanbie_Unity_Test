@@ -13,6 +13,12 @@ public class HoverMenuControl : MonoBehaviour
 
     private bool _needUpdate = false;
 
+    public Transform GetOwner()
+    {
+        return _owner;
+
+    }
+
     private void Start()
     {
         _owner = transform.parent;

@@ -8,6 +8,7 @@ TagManager:
   - Editable_UI
   - Hover_UI
   - Editor_UI
+  - Picker
   layers:
   - Default
   - TransparentFX

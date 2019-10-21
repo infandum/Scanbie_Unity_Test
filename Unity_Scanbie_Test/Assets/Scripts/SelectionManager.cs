@@ -12,11 +12,13 @@ public class SelectionManager : MonoBehaviour
 
     [SerializeField] private Color _hoverColor = Color.yellow;
     [SerializeField] private Color _SelectColor = Color.green;
-    [SerializeField] private float _lerpFactor = 10;
+    [SerializeField] private float _lerpFactor = 10; 
 
     private bool _isBusyInUi = false;
+    private bool _hideUI = false;
     private Camera _mainCamera;
-    
+
+    public float GetLerpFactor() { return _lerpFactor;}
     // Start is called before the first frame update
     void Start()
     {
@@ -47,8 +49,31 @@ public class SelectionManager : MonoBehaviour
         return _isBusyInUi;
     }
 
+    private void ToggleUi()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) _hideUI = !_hideUI;
+
+        if (_hideUI)
+        {
+            if (_hover != null)
+                if (_hover.GetComponent<MenuObjectControl>() != null)
+                    _hover.GetComponent<MenuObjectControl>().OnExit();
+
+            if (_selected != null)
+                if (_selected.GetComponent<MenuObjectControl>() != null)
+                    _selected.GetComponent<MenuObjectControl>().OnExit();
+        }
+        else
+        {
+            if (_selected != null)
+                if (_selected.GetComponent<MenuObjectControl>() != null)
+                    _selected.GetComponent<MenuObjectControl>().OnHover();
+        }
+           
+    }
     void Update()
     {
+        ToggleUi();
 
         //if you want to keep the hover menu open on the selected object change:
         //_hover != _selected
@@ -110,7 +135,7 @@ public class SelectionManager : MonoBehaviour
                             if (targetGlow != null)
                                 targetGlow.OnHover(_hoverColor);
                         }
-                        if(targetMenu != null)
+                        if(targetMenu != null && !_hideUI)
                             targetMenu.OnHover();
                        _hover = targetTransform;
                     }   

@@ -1,20 +1,16 @@
-﻿using System;
-using System.Linq;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 namespace Assets.Scripts.UI.MenuControllers
 {
     public class TextEditorUiControl : MonoBehaviour
     {
-        [SerializeField] private SelectionManager _selectionManager;
-
+        private SelectionManager _selectionManager;
         [SerializeField]private string _textfileName = "LoremIpsum";
-        [SerializeField] private string _noFile = "NoFile";
-        private string _subfolder = "Resources";
+        private string _noFile = "NoFile";
+        private bool _inUse;
 
-        [SerializeField] private bool InUse = false;
-        void OnEnable()
+        private void OnEnable()
         {
             if(_selectionManager == null)
                 _selectionManager = GameObject.FindWithTag("GameController").GetComponent<SelectionManager>();
@@ -25,13 +21,13 @@ namespace Assets.Scripts.UI.MenuControllers
 
         public void IsEditing(bool edit)
         {
-            InUse = edit;
-            _selectionManager.IsEditing(InUse);
+            _inUse = edit;
+            _selectionManager.IsEditing(_inUse);
         }
 
         public bool IsEditing()
         {
-            return InUse;
+            return _inUse;
         }
 
         public void LoadFile()
@@ -44,11 +40,6 @@ namespace Assets.Scripts.UI.MenuControllers
         {
             var str = BasicIO.ReadFromFile(_textfileName) ?? BasicIO.ReadFromFile(_noFile);
             transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = str;
-        }
-
-        public void RefreshFile()
-        {
-        
         }
     }
 }

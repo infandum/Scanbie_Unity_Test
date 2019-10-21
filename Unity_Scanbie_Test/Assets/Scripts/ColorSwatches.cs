@@ -58,6 +58,14 @@ public class ColorSwatches : MonoBehaviour
             SaveTexture();
     }
 
+    public Color GetColor(RectTransform textRectTransform)
+    {
+        if (!textRectTransform) return Color.magenta;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(textRectTransform, Input.mousePosition, Camera.main, out var localPos);
+        return Texture.GetPixelBilinear(localPos.x, localPos.y);
+
+    }
+
     private void SaveTexture()
     {
         BasicIO.SaveTextureToPng(Texture, _textureName);

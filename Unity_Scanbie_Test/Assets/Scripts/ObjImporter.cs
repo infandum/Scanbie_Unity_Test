@@ -17,13 +17,13 @@ namespace Assets.Scripts
             public Vector3[] Vertices;
             public Vector3[] Normals;
             public Vector2[] Uv;
-            public Vector2[] Uv1;
-            public Vector2[] Uv2;
+            //public Vector2[] Uv1;
+            //public Vector2[] Uv2;
             public int[] Triangles;
-            public int[] FaceVerts;
-            public int[] FaceUVs;
+            //public int[] FaceVerts;
+            //public int[] FaceUVs;
             public Vector3[] FaceData;
-            public string Name;
+            //public string Name;
             public string FileName;
         }
 

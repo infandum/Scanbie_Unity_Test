@@ -1,31 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts.UI.MenuControllers;
+﻿using Assets.Scripts.UI.MenuControllers;
 using UnityEngine;
 
-public class UITextInputfield : MonoBehaviour
+namespace Assets.Scripts.UI.Buttons
 {
-    //public void OnSave()
-    //{
-    //    transform.parent.GetComponent<TextEditorUiControl>().IsEditing(true);
-    //    print("Select");
-    //}
-    public void Onload()
+    public class UiTextInputfield : MonoBehaviour
     {
-        transform.parent.GetComponent<TextEditorUiControl>().LoadFile();
-        
-    }
+        //public void OnSave()
+        //{
+        //    transform.parent.GetComponent<TextEditorUiControl>().IsEditing(true);
+        //    print("Select");
+        //}
+        public void Onload()
+        {
+            transform.parent.GetComponent<TextEditorUiControl>().LoadFile();  
+        }
 
-    public void OnSelected()
-    {
-        transform.parent.GetComponent<TextEditorUiControl>().IsEditing(true);
-        print("Select");
-    }
+        public void OnSelected()
+        {
+            transform.parent.GetComponent<TextEditorUiControl>().IsEditing(true);
+        }
 
 
-    public void OnDeselected()
-    {
-        transform.parent.GetComponent<TextEditorUiControl>().IsEditing(false);
-        print("Deselect");
+        public void OnDeselected()
+        {
+            transform.parent.GetComponent<TextEditorUiControl>().IsEditing(false);
+        }
     }
 }
