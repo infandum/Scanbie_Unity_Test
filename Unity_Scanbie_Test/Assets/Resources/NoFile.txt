@@ -1,0 +1,8 @@
+!!404 ERROR!!
+No file found.
+Please check:
+1) If file in resources.
+2)If file name is correct.
+3)If file even exists.
+
+-404

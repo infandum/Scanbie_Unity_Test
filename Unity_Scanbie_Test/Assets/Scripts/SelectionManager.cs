@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class SelectionManager : MonoBehaviour
 {
-    [SerializeField] private Material _defaultMaterial;
-    [SerializeField] private Material _selectedMaterial;
-
     [SerializeField] private Transform _hover;
     [SerializeField] private Transform _selected;
     [SerializeField] private const string _targetTag = "Editable";
@@ -17,15 +14,13 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] private Color _SelectColor = Color.green;
     [SerializeField] private float _lerpFactor = 10;
 
-    public Color c;
-
-    public Image colorimg;
-
+    private bool _isBusyInUi = false;
+    private Camera _mainCamera;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        _mainCamera = Camera.main;
     }
 
     private void DeselectObject()
@@ -39,6 +34,19 @@ public class SelectionManager : MonoBehaviour
         }
         _selected = null;
     }
+
+
+    public void IsEditing(bool edit)
+    {
+        _isBusyInUi = edit;
+        _mainCamera.GetComponent<CameraController>().Active = !_isBusyInUi;
+    }
+
+    public bool IsEditing()
+    {
+        return _isBusyInUi;
+    }
+
     void Update()
     {
 
@@ -46,19 +54,22 @@ public class SelectionManager : MonoBehaviour
         //_hover != _selected
         if (_hover != null && _hover != _selected)
         {
-            var hoverGlow = _hover.GetComponent<GlowObjectControl>();
-            var hoverMenu = _hover.GetComponent<MenuObjectControl>();
+            if (!_isBusyInUi)
+            {
+                var hoverGlow = _hover.GetComponent<GlowObjectControl>();
+                var hoverMenu = _hover.GetComponent<MenuObjectControl>();
 
-            if (hoverGlow != null /*&& _hover != _selected*/)
-                hoverGlow.OnExit();
-            if (hoverMenu != null)
-                hoverMenu.OnExit();
-            
-            _hover = null;
+                if (hoverGlow != null /*&& _hover != _selected*/)
+                    hoverGlow.OnExit();
+                if (hoverMenu != null)
+                    hoverMenu.OnExit();
+
+                _hover = null;
+            }          
         }
 
 
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out var target))
         {
             var targetTransform = target.transform;
@@ -78,6 +89,7 @@ public class SelectionManager : MonoBehaviour
                 return;
             }
                
+            if(_isBusyInUi) return;
 
             if (targetTransform.CompareTag(_targetTag))
             {

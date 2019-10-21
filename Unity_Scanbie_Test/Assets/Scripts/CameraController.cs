@@ -47,11 +47,11 @@ public class CameraController : MonoBehaviour
     /// </summary>
     public bool looking = false;
 
-    public bool active = true;
+    public bool Active = true;
 
     void Update()
     {
-        if(!active)return;
+        if(!Active)return;
         
 
         var fastMode = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);

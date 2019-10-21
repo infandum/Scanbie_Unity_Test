@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts;
+using Assets.Scripts.UI.MenuControllers;
 
 public class EditorUIControl : MonoBehaviour
 {
@@ -64,8 +65,8 @@ public class EditorUIControl : MonoBehaviour
         switch (_currentControlOption)
         {
             case EditorControlOption.Color:
-                
-                transform.GetChild((int)_currentControlOption).GetComponent<ColorEditorUIControl>().ChangeColor(selected);
+                transform.GetChild((int)_currentControlOption).GetComponent<ColorEditorUiControl>().ChangeColor(selected);
+
                 break;
             case EditorControlOption.Light:
                 break;
