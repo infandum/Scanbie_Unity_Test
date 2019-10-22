@@ -13,7 +13,7 @@ namespace Assets.Scripts.UI.MenuControllers
         private Transform _owner;
 
         private bool _usingPicker = true;
-        private bool _switch = false;
+
         [SerializeField] private Color _currentColor;
         private void OnEnable()
         {
@@ -67,7 +67,7 @@ namespace Assets.Scripts.UI.MenuControllers
             //TODO: get multi mesh renderers
             if (_owner.GetComponent<MeshRenderer>())
                 _owner.GetComponent<MeshRenderer>().materials[0].color = _currentColor;
-            _owner.FindChildWithTag("Hover_UI").GetComponent<HoverMenuControl>().Needupdate();
+            _owner.FindChildWithTag("Hover_UI").GetComponent<HoverMenuControl>().NeedUpdate();
         }
 
         public void SetCurrentColor(Color color)

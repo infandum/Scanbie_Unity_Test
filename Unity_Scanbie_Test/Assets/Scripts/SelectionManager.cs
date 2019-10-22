@@ -51,7 +51,7 @@ public class SelectionManager : MonoBehaviour
 
     private void ToggleUi()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) _hideUI = !_hideUI;
+        if (Input.GetKeyDown(KeyCode.V)) _hideUI = !_hideUI;
 
         if (_hideUI)
         {

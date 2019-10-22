@@ -10,9 +10,19 @@ namespace Assets.Scripts.UI.Buttons
         //    transform.parent.GetComponent<TextEditorUiControl>().IsEditing(true);
         //    print("Select");
         //}
-        public void Onload()
+        public void Reload()
         {
-            transform.parent.GetComponent<TextEditorUiControl>().LoadFile();  
+            transform.parent.GetComponent<TextEditorUiControl>().ReloadFile();  
+        }
+
+        public void Save()
+        {
+            transform.parent.GetComponent<TextEditorUiControl>().ReloadFile();
+        }
+
+        public void Upload()
+        {
+            transform.parent.GetComponent<TextEditorUiControl>().ReloadFile();
         }
 
         public void OnSelected()

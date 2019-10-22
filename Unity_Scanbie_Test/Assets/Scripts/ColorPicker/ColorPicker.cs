@@ -37,7 +37,6 @@ public class ColorPicker : MonoBehaviour
         if (_owner)
         {
             meshRenderer = _owner.GetComponent<MeshRenderer>();
-
             _currentColor = meshRenderer.materials[0].color;
         }
             

@@ -6,9 +6,9 @@ using UnityEngine;
 /// 
 /// Keys:
 ///	wasd / arrows	- movement
-///	q/e 			- up/down (local space)
-///	r/f 			- up/down (world space)
-///	pageup/pagedown	- up/down (world space)
+///	q/e 			- left/right rotation
+///	r/f 			- up/down rotation
+///	pageup/pagedown	- up/down movement
 ///	hold shift		- enable fast movement mode
 ///	right mouse  	- enable free look
 ///	mouse			- free look / rotation
@@ -49,52 +49,74 @@ public class CameraController : MonoBehaviour
 
     public bool Active = true;
 
+    private Transform pointer;
     void Update()
     {
         if(!Active)return;
-        
 
-        var fastMode = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-        var movementSpeed = fastMode ? this.fastMovementSpeed : this.movementSpeed;
+        if (!pointer)
+            pointer = transform.GetChild(0);
+
+        var fastMode = Input.GetKey(KeyCode.Space);
+        var speed = fastMode ? this.fastMovementSpeed : this.movementSpeed;
 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.position = transform.position + (-transform.right * movementSpeed * Time.deltaTime);
+            transform.position = transform.position + (-transform.right * speed * Time.deltaTime);
         }
 
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            transform.position = transform.position + (transform.right * movementSpeed * Time.deltaTime);
+            transform.position = transform.position + (transform.right * speed * Time.deltaTime);
         }
 
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
-            transform.position = transform.position + (transform.forward * movementSpeed * Time.deltaTime);
+            transform.position = transform.position + (transform.forward * speed * Time.deltaTime);
         }
 
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
-            transform.position = transform.position + (-transform.forward * movementSpeed * Time.deltaTime);
+            transform.position = transform.position + (-transform.forward * speed * Time.deltaTime);
         }
+
+
 
         if (Input.GetKey(KeyCode.Q))
         {
-            transform.position = transform.position + (transform.up * movementSpeed * Time.deltaTime);
+            float newRotationY = transform.localEulerAngles.y - (speed * 4) * Time.deltaTime;
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, newRotationY, 0f);
         }
 
         if (Input.GetKey(KeyCode.E))
         {
-            transform.position = transform.position + (-transform.up * movementSpeed * Time.deltaTime);
+            float newRotationY = transform.localEulerAngles.y + (speed * 4) * Time.deltaTime;
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, newRotationY, 0f);
         }
 
-        if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.PageUp))
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.PageUp))
         {
             transform.position = transform.position + (Vector3.up * movementSpeed * Time.deltaTime);
         }
 
-        if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.PageDown))
+        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.PageDown))
         {
             transform.position = transform.position + (-Vector3.up * movementSpeed * Time.deltaTime);
+        }
+
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            
+            float newRotationX = transform.localEulerAngles.x - (speed * 4) * Time.deltaTime;
+            transform.localEulerAngles = new Vector3(newRotationX, transform.localEulerAngles.y, 0f);
+        }
+
+        if (Input.GetKey(KeyCode.F))
+        {
+           
+            float newRotationX = transform.localEulerAngles.x + (speed * 4) * Time.deltaTime;
+            transform.localEulerAngles = new Vector3(newRotationX, transform.localEulerAngles.y, 0f);
         }
 
         if (looking)
@@ -114,10 +136,12 @@ public class CameraController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             StartLooking();
+            
         }
         else if (Input.GetKeyUp(KeyCode.Mouse1))
         {
             StopLooking();
+            
         }
     }
 
@@ -134,6 +158,8 @@ public class CameraController : MonoBehaviour
         looking = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        if (!pointer.gameObject.activeInHierarchy)
+            pointer.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -144,6 +170,7 @@ public class CameraController : MonoBehaviour
         looking = false;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        pointer.gameObject.SetActive(false);
     }
 
 }
