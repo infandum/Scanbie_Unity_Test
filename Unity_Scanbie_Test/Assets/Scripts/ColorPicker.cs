@@ -32,10 +32,15 @@ public class ColorPicker : MonoBehaviour
         _HueSlider = transform.GetChild(0).GetComponent<Slider>();
         _valueSlider = transform.GetChild(1).GetComponent<Slider>();
         _pickManager = GameObject.FindWithTag("GameController").GetComponent<ColorPickerManager>();
+        MeshRenderer meshRenderer;
 
-        var meshRenderer = _owner.GetComponent<MeshRenderer>();
+        if (_owner)
+        {
+            meshRenderer = _owner.GetComponent<MeshRenderer>();
 
-        _currentColor = meshRenderer.materials[0].color;
+            _currentColor = meshRenderer.materials[0].color;
+        }
+            
         ColorHSV color = new ColorHSV(_currentColor);
 
         _HueSlider.value = color.h;
@@ -64,24 +69,35 @@ public class ColorPicker : MonoBehaviour
         _HueSlider = slider;
         Hue = (int)slider.value;
 
-        _pickManager.GenerateColorTexture(Hue);
+        if (_pickManager)
+        {
+            _pickManager.GenerateColorTexture(Hue);
 
-        _colorTexture2D = _pickManager.GetColorTexture2D();
-        transform.GetChild(2).GetComponent<Image>().sprite = Sprite.Create(_colorTexture2D, new Rect(0.0f, 0.0f, _colorTexture2D.width, _colorTexture2D.height), new Vector2(0.5f, 0.5f), 100.0f);
-        var x = Mathf.Clamp(_picker.localPosition.x, 0, 0.99f);
-        var y = Mathf.Clamp(_picker.localPosition.y, 0, 0.99f);
-        _currentColor = _colorTexture2D.GetPixelBilinear(x, y);
-        _picker.GetChild(0).GetComponent<Image>().color = _currentColor;
+            _colorTexture2D = _pickManager.GetColorTexture2D();
+
+            transform.GetChild(2).GetComponent<Image>().sprite = Sprite.Create(_colorTexture2D, new Rect(0.0f, 0.0f, _colorTexture2D.width, _colorTexture2D.height), new Vector2(0.5f, 0.5f), 100.0f);
+
+            var x = Mathf.Clamp(_picker.localPosition.x, 0, 0.99f);
+            var y = Mathf.Clamp(_picker.localPosition.y, 0, 0.99f);
+
+            _currentColor = _colorTexture2D.GetPixelBilinear(x, y);
+
+            _picker.GetChild(0).GetComponent<Image>().color = _currentColor;
+        }
+        
     }
     public void SetValue(Slider slider)
     {
         _valueSlider = slider;
         Value = _valueSlider.value;
 
-        _picker.localPosition = new Vector3(_picker.localPosition.x, Value, _picker.localPosition.z);
-        _currentColor = _colorTexture2D.GetPixelBilinear(_picker.localPosition.x, _picker.localPosition.y);
+        if (_picker)
+        {
+            _picker.localPosition = new Vector3(_picker.localPosition.x, Value, _picker.localPosition.z);
+            _currentColor = _colorTexture2D.GetPixelBilinear(_picker.localPosition.x, _picker.localPosition.y);
 
-        _picker.GetChild(0).GetComponent<Image>().color = _currentColor;
+            _picker.GetChild(0).GetComponent<Image>().color = _currentColor;
+        }       
     }
 
     public void PickColor(RectTransform textRectTransform)
@@ -94,7 +110,7 @@ public class ColorPicker : MonoBehaviour
         _currentColor = _colorTexture2D.GetPixelBilinear(localPos.x, localPos.y);
         _picker.localPosition = localPos;
         _picker.GetChild(0).GetComponent<Image>().color = _currentColor;
-
+        transform.parent.GetComponent<ColorEditorUiControl>().SetCurrentColor(_currentColor);
         _valueSlider.value = new ColorHSV(_currentColor).v;
     }
 

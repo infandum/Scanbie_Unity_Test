@@ -5,55 +5,75 @@ namespace Assets.Scripts.UI.MenuControllers
 {
     public class ColorEditorUiControl : MonoBehaviour
     {
-        //TODO CLEAN UP SWATCH STUFF
+        //TODO: refractor swatches and picker
         private ColorSwatches _swatchManager;
         private Texture2D _texure;
         private Transform _swatch;
         private Transform _picker;
+        private Transform _owner;
 
         private bool _usingPicker = true;
-
+        private bool _switch = false;
+        [SerializeField] private Color _currentColor;
         private void OnEnable()
         {
             if (_picker == null)
                 _picker = transform.GetChild(0);
-
-            _picker.GetComponent<ColorPicker>().PreparePicker(transform.parent.parent.parent);
-
+            if (_owner == null)
+            {
+                _owner = transform.parent.parent.parent;
+            }
+            else
+            {
+                _picker.GetComponent<ColorPicker>().PreparePicker(_owner);
+                _currentColor = _owner.GetComponent<MeshRenderer>().materials[0].color;
+            }
+           
 
             if (_swatch == null)
                 _swatch = transform.GetChild(1);
             if (_swatchManager == null)
                 _swatchManager = GameObject.FindWithTag("GameController").GetComponent<ColorSwatches>();
 
-
-            var texture = _swatchManager.Texture;
-            if(_swatchManager.Texture)
-                _swatch.GetChild(0).GetComponent<Image>().sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
+            _swatchManager.PrepareSwatch(_swatch.GetChild(0));
 
         }
 
-        public void ChangeColor(Transform selected)
+        public void ChangeColor(/*Transform selected*/)
         {
-            //TODO: CAUSES BUGGY INTERACTION WITH UI AND STUFF FIX EVENT MANAGEMENT
-            Color color = Color.magenta;
             if (_usingPicker)
             {
                 var pick = _picker.GetComponent<ColorPicker>();
-                color = pick.GetColor();
+                _currentColor = pick.GetColor();
+                
             }
             else
             {
                 if (_swatch.GetChild(0).GetComponent<RectTransform>())
-                    color = _swatchManager.GetColor(_swatch.GetChild(0).GetComponent<RectTransform>());
+                {
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(_swatch.GetChild(0).GetComponent<RectTransform>(), Input.mousePosition, Camera.main, out var localPos);
+                    if (localPos.y < 0 || localPos.y >= 1 || localPos.x < 0 || localPos.x >= 1)
+                        return;
+
+                    _currentColor = _swatchManager.GetColor(localPos);
+                }
+
             }
+            UpdateOwner();
+        }
 
-
+        private void UpdateOwner()
+        {
             //TODO: get multi mesh renderers
-            if(selected.GetComponent<MeshRenderer>())
-                selected.GetComponent<MeshRenderer>().materials[0].color = color;
+            if (_owner.GetComponent<MeshRenderer>())
+                _owner.GetComponent<MeshRenderer>().materials[0].color = _currentColor;
+            _owner.FindChildWithTag("Hover_UI").GetComponent<HoverMenuControl>().Needupdate();
+        }
 
-            selected.FindChildWithTag("Hover_UI").GetComponent<HoverMenuControl>().Needupdate();
+        public void SetCurrentColor(Color color)
+        {
+            _currentColor = color;
+            UpdateOwner();
         }
 
         public void SwitchPicker()
@@ -71,4 +91,5 @@ namespace Assets.Scripts.UI.MenuControllers
             }
         }
     }
+
 }

@@ -65,7 +65,7 @@ public class EditorUIControl : MonoBehaviour
         switch (_currentControlOption)
         {
             case EditorControlOption.Color:
-                transform.GetChild((int)_currentControlOption).GetComponent<ColorEditorUiControl>().ChangeColor(selected);
+                transform.GetChild((int)_currentControlOption).GetComponent<ColorEditorUiControl>().ChangeColor();
 
                 break;
             case EditorControlOption.Light:

@@ -10,7 +10,7 @@ public class ColorSwatches : MonoBehaviour
     public Texture2D Texture;
     public int TextureSize = 64;
     [SerializeField] private string _textureName = "Swatch";
-
+    [SerializeField] private Color _currentColor;
     public bool GenerateTexture = true;
 
     public List<Color> Swatches;
@@ -20,7 +20,7 @@ public class ColorSwatches : MonoBehaviour
 
     private int _swatchCountSqrt = 1;
     private int _swatchSize = 1;
-    void Start()
+    void Awake()
     {
         if(!GenerateTexture) return;
 
@@ -58,12 +58,24 @@ public class ColorSwatches : MonoBehaviour
             SaveTexture();
     }
 
-    public Color GetColor(RectTransform textRectTransform)
+    public Color GetColor(Vector2 localPos)
     {
-        if (!textRectTransform) return Color.magenta;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(textRectTransform, Input.mousePosition, Camera.main, out var localPos);
+        //if (!textRectTransform) return Color.magenta;
+
+        //RectTransformUtility.ScreenPointToLocalPointInRectangle(textRectTransform, Input.mousePosition, Camera.main, out var localPos);
+
+        //print(localPos);
+        //if (localPos.y < 0 || localPos.y >= 1) return Color.magenta;
+        //if (localPos.x < 0 || localPos.x >= 1) return Color.magenta;
+
         return Texture.GetPixelBilinear(localPos.x, localPos.y);
 
+    }
+
+    public void PrepareSwatch(Transform swatch)
+    {
+        if(Texture)
+            swatch.GetComponent<Image>().sprite = Sprite.Create(Texture, new Rect(0.0f, 0.0f, Texture.width, Texture.height), new Vector2(0.5f, 0.5f), 100.0f);
     }
 
     private void SaveTexture()
