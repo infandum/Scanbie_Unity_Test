@@ -25,7 +25,7 @@ namespace Assets.Scripts.UI.MenuControllers
 
         private void SetInputField()
         {
-            transform.GetChild(1).GetComponent<TMP_InputField>().text = _menuControler.Data.InfoFile + ".txt";
+            transform.GetChild(1).GetComponent<TMP_InputField>().text = _menuControler.EditableData.InfoFile + ".txt";
         }
 
         private string GetInputField()
@@ -47,33 +47,33 @@ namespace Assets.Scripts.UI.MenuControllers
 
         public void ReloadFile()
         {
-            _menuControler.Data.InfoFile = transform.GetChild(1).GetComponent<TMP_InputField>().text.Split('.')[0];
+            _menuControler.EditableData.InfoFile = transform.GetChild(1).GetComponent<TMP_InputField>().text.Split('.')[0];
             RefreshText();
         }
 
         public void SaveFile()
         {
-            _menuControler.Data.InfoFile = transform.GetChild(1).GetComponent<TMP_InputField>().text.Split('.')[0];
-            BasicIO.SaveToFile(_menuControler.Data.InfoFile, GetInputField());
+            _menuControler.EditableData.InfoFile = transform.GetChild(1).GetComponent<TMP_InputField>().text.Split('.')[0];
+            BasicIO.SaveToFile(_menuControler.EditableData.InfoFile, GetInputField());
             RefreshText();
         }
 
         public void UploadFile()
         {
             print(Application.dataPath);
-            var path = EditorUtility.OpenFilePanel("Overwrite text file", Application.dataPath + "/Rescources/", "txt");
-            if (!path.Equals(""))
-            {
-                var paths = path.Split('/');
-                path = paths[paths.Length - 1];
-                path = path.Split('.')[0];
+            //var path = EditorUtility.OpenFilePanel("Overwrite text file", Application.dataPath + "/Rescources/", "txt");
+            //if (!path.Equals(""))
+            //{
+            //    var paths = path.Split('/');
+            //    path = paths[paths.Length - 1];
+            //    path = path.Split('.')[0];
 
-                if (path != "")
-                    _menuControler.Data.InfoFile = path;
+            //    if (path != "")
+            //        _menuControler.EditableData.InfoFile = path;
 
-                SetInputField();
-                RefreshText();
-            }
+            //    SetInputField();
+            //    RefreshText();
+            //}
             
         }
 
@@ -81,7 +81,7 @@ namespace Assets.Scripts.UI.MenuControllers
 
         private void RefreshText()
         {
-            var str = BasicIO.ReadFromFile(_menuControler.Data.InfoFile) ?? BasicIO.ReadFromFile(_noFile);
+            var str = BasicIO.ReadFromFile(_menuControler.EditableData.InfoFile) ?? BasicIO.ReadFromFile(_noFile);
             transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = str;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,17 +34,27 @@ public class HoverMenuControl : MonoBehaviour
 
     private void UpdateOnce()
     {
-        if (_owner == null) return;
-        if (_owner.GetComponent<MeshRenderer>() == null) return;
-        var meshRenderer = _owner.GetComponent<MeshRenderer>();
-        var color = meshRenderer.materials[0].color;
-        _colorTransform.GetChild(0).GetChild(0).GetComponent<Image>().color = color;
-        _owner.GetComponent<MenuObjectControl>().Data.MainColor = color;
+        if (_owner == null) return;    
+        if (_owner.GetComponent<MenuObjectControl>() == null) return;
+
+        var objectControl = _owner.GetComponent<MenuObjectControl>();
+        _owner.GetComponent<MenuObjectControl>().SetEditableDataToObject();
+
+        var color = objectControl.EditableData.MainColor;
+        _colorTransform.GetChild(0).GetChild(0).GetComponent<Image>().color = color.ToColor();
     }
 
     public void NeedUpdate()
     {
-        _needUpdate = true;
+        if (_owner == null) return;
+        if (_owner.GetComponent<MenuObjectControl>() == null) return;
+
+        var objectControl = _owner.GetComponent<MenuObjectControl>();
+        _owner.GetComponent<MenuObjectControl>().SetEditableDataToObject();
+
+        var color = objectControl.EditableData.MainColor;
+        _colorTransform.GetChild(0).GetChild(0).GetComponent<Image>().color = color.ToColor();
+        //_needUpdate = true;
     }
     // Update is called once per frame
     private void Update()

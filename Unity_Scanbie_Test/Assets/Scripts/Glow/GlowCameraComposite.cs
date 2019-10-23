@@ -17,6 +17,9 @@ public class GlowCameraComposite : MonoBehaviour
 	void OnRenderImage(RenderTexture src, RenderTexture dst)
 	{
 		_compositeMat.SetFloat("_Intensity", Intensity);
+        //Graphics.Blit(src, dst, _compositeMat, 0);
+	    Graphics.Blit(src, dst);
         Graphics.Blit(src, dst, _compositeMat, 0);
-	}
+	    
+    }
 }

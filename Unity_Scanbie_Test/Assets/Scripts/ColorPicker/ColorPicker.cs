@@ -24,7 +24,7 @@ public class ColorPicker : MonoBehaviour
         
     }
 
-    public void PreparePicker(Transform owner)
+    public void PreparePicker(Transform owner, Color col)
     {
         //TODO: CLEAN THIS UP AND FIX EVENT MANAGEMENT
         _owner = owner;
@@ -32,14 +32,8 @@ public class ColorPicker : MonoBehaviour
         _HueSlider = transform.GetChild(0).GetComponent<Slider>();
         _valueSlider = transform.GetChild(1).GetComponent<Slider>();
         _pickManager = GameObject.FindWithTag("GameController").GetComponent<ColorPickerManager>();
-        MeshRenderer meshRenderer;
 
-        if (_owner)
-        {
-            meshRenderer = _owner.GetComponent<MeshRenderer>();
-            _currentColor = meshRenderer.materials[0].color;
-        }
-            
+        _currentColor = col;          
         ColorHSV color = new ColorHSV(_currentColor);
 
         _HueSlider.value = color.h;
@@ -109,7 +103,9 @@ public class ColorPicker : MonoBehaviour
         _currentColor = _colorTexture2D.GetPixelBilinear(localPos.x, localPos.y);
         _picker.localPosition = localPos;
         _picker.GetChild(0).GetComponent<Image>().color = _currentColor;
+
         transform.parent.GetComponent<ColorEditorUiControl>().SetCurrentColor(_currentColor);
+
         _valueSlider.value = new ColorHSV(_currentColor).v;
     }
 

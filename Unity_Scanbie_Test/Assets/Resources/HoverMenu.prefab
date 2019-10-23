@@ -2107,7 +2107,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4681305281882105586}
-        m_MethodName: UpdateRecieveShadows
+        m_MethodName: UpdateReceiveShadows
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

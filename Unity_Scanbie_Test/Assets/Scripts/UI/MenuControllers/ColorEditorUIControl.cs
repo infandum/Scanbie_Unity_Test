@@ -6,15 +6,14 @@ namespace Assets.Scripts.UI.MenuControllers
     public class ColorEditorUiControl : MonoBehaviour
     {
         //TODO: refractor swatches and picker
+        private Transform _owner;
+        private MenuObjectControl _menuController;
         private ColorSwatches _swatchManager;
-        private Texture2D _texure;
+        private Texture2D _texture;
         private Transform _swatch;
         private Transform _picker;
-        private Transform _owner;
-
+       
         private bool _usingPicker = true;
-
-        [SerializeField] private Color _currentColor;
         private void OnEnable()
         {
             if (_picker == null)
@@ -22,13 +21,13 @@ namespace Assets.Scripts.UI.MenuControllers
             if (_owner == null)
             {
                 _owner = transform.parent.parent.parent;
+                if (_menuController == null)
+                {
+                    _menuController = _owner.GetComponent<MenuObjectControl>();
+                }
             }
-            else
-            {
-                _picker.GetComponent<ColorPicker>().PreparePicker(_owner);
-                _currentColor = _owner.GetComponent<MeshRenderer>().materials[0].color;
-            }
-           
+
+            _picker.GetComponent<ColorPicker>().PreparePicker(_owner, _menuController.EditableData.MainColor.ToColor());
 
             if (_swatch == null)
                 _swatch = transform.GetChild(1);
@@ -36,7 +35,6 @@ namespace Assets.Scripts.UI.MenuControllers
                 _swatchManager = GameObject.FindWithTag("GameController").GetComponent<ColorSwatches>();
 
             _swatchManager.PrepareSwatch(_swatch.GetChild(0));
-
         }
 
         public void ChangeColor(/*Transform selected*/)
@@ -44,7 +42,7 @@ namespace Assets.Scripts.UI.MenuControllers
             if (_usingPicker)
             {
                 var pick = _picker.GetComponent<ColorPicker>();
-                _currentColor = pick.GetColor();
+                _menuController.EditableData.MainColor.SetColor(pick.GetColor());
                 
             }
             else
@@ -55,25 +53,24 @@ namespace Assets.Scripts.UI.MenuControllers
                     if (localPos.y < 0 || localPos.y >= 1 || localPos.x < 0 || localPos.x >= 1)
                         return;
 
-                    _currentColor = _swatchManager.GetColor(localPos);
+                    _menuController.EditableData.MainColor.SetColor(_swatchManager.GetColor(localPos));
                 }
 
             }
-            UpdateOwner();
+            UpdateColor();
         }
 
-        private void UpdateOwner()
+        private void UpdateColor()
         {
-            //TODO: get multi mesh renderers
-            if (_owner.GetComponent<MeshRenderer>())
-                _owner.GetComponent<MeshRenderer>().materials[0].color = _currentColor;
+            if (_menuController)
+                _menuController.SetEditableDataToObject();
             _owner.FindChildWithTag("Hover_UI").GetComponent<HoverMenuControl>().NeedUpdate();
         }
 
         public void SetCurrentColor(Color color)
         {
-            _currentColor = color;
-            UpdateOwner();
+            _menuController.EditableData.MainColor.SetColor(color);
+            UpdateColor();
         }
 
         public void SwitchPicker()
